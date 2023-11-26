@@ -1,3 +1,4 @@
 /dev/estate_exports
 __pycache__/
 /venv
+.env
