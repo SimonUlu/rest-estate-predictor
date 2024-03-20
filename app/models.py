@@ -10,7 +10,7 @@ class Estate(Base):
     __tablename__ = 'estates'
 
     id = Column(UUID(as_uuid=True), primary_key=True)
-    gok = Column(String)
+    gok = Column(String(255))
     postcode = Column(String(10))
     city = Column(String(100))
     estate_types = Column(JSON, nullable=True)
@@ -37,6 +37,6 @@ class APIUser(Base):
     __tablename__ = "api_users"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    api_token = Column(String, unique=True)
-    secret = Column(String)
+    username = Column(String(255), unique=True, index=True)
+    api_token = Column(String(255), unique=True)
+    secret = Column(String(255))

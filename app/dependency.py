@@ -14,6 +14,7 @@ def get_password_hash(password: str):
     return pwd_context.hash(password)
 
 async def verify_api_token(x_api_token: str = Header(...), db: Session = Depends(get_db)):
+    
     # Überprüfen, ob der API-Token einem Benutzer in der DB entspricht
     api_user = get_api_user_by_token(db, api_token=x_api_token)
     if api_user is None:

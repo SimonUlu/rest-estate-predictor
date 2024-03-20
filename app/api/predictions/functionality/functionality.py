@@ -1,32 +1,32 @@
 import os
 import pandas as pd
 import json
-def prepare_data(estate_input):
+def prepare_data(estate_input, category):
     
     input_data = estate_input.dict()
     # Erstelle ein DataFrame aus dem JSON-Objekt
     df = pd.DataFrame.from_dict(input_data, orient='index').T
     
-    df = perform_one_hot_encoding(df)
+    df = perform_one_hot_encoding(df, category)
     
     df = convert_xgb_data(df)
     
     return df
 
 
-def perform_one_hot_encoding(df):
+def perform_one_hot_encoding(df, category):
     current_dir = os.getcwd()
     # Öffne die JSON-Datei im Lesemodus und lade ihren Inhalt
-    with open(os.path.join(current_dir, 'app' ,'estate_fields', 'estate_subtypes.json'), 'r') as json_datei:
+    with open(os.path.join(current_dir, 'app' ,'estate_fields', category, 'estate_subtypes.json'), 'r') as json_datei:
         subtypes = json.load(json_datei)
         
-    with open(os.path.join(current_dir, 'app' ,'estate_fields', 'estate_types.json'), 'r') as json_datei:
+    with open(os.path.join(current_dir, 'app' ,'estate_fields', category ,'estate_types.json'), 'r') as json_datei:
         types = json.load(json_datei)
         
-    with open(os.path.join(current_dir, 'app' ,'estate_fields', 'features.json'), 'r') as json_datei:
+    with open(os.path.join(current_dir, 'app' ,'estate_fields', category ,'features.json'), 'r') as json_datei:
         features = json.load(json_datei)
         
-    with open(os.path.join(current_dir, 'app' ,'estate_fields', 'city_list.json'), 'r') as json_datei:
+    with open(os.path.join(current_dir, 'app' ,'estate_fields', category ,'city_list.json'), 'r') as json_datei:
         city_types = json.load(json_datei)
     
     # Füge Spalten für estate_features hinzu

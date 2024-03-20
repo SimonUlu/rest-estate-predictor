@@ -29,10 +29,11 @@ class EstateInput(BaseModel):
 current_directory = os.path.dirname(os.path.realpath(__file__))
 
 # Pfad zum Modell (zwei Verzeichnisebenen nach oben)
-model_path = os.path.join(current_directory, '..', '..', 'ml_models', 'xgb_model.joblib')
+model_path_apartment = os.path.join(current_directory, '..', '..', 'ml_models', 'xgb_model_apartments.joblib')
+
+model_path_house = os.path.join(current_directory, '..', '..', 'ml_models', 'xgb_model_houses.joblib')
    
-# Laden des Modells
-model = joblib.load(model_path)
+
 
 
 @router.post('/predict/')
@@ -40,8 +41,20 @@ def predict_estate_value(
     estate_input: EstateInput,
     api_user: APIUser = Depends(verify_api_token) 
 ):
-    # Statt eine Vorhersage zu machen, geben wir einfach die Eingabedaten zurück
-    prepared_data = functionality.prepare_data(estate_input)
+    
+    estate_type = estate_input.estate_types[0]
+    
+    print(estate_type)
+
+    if (estate_type == "APARTMENT"):    
+        # prepare data for model -> convert to same structure
+        prepared_data = functionality.prepare_data(estate_input, 'apartments')
+        model_path = model_path_apartment
+    else:
+        prepared_data = functionality.prepare_data(estate_input, 'houses')
+        model_path = model_path_house
+        
+    model = joblib.load(model_path)
     
     prediction = model.predict(prepared_data)
     
